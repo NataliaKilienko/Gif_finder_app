@@ -9,17 +9,29 @@
   border-radius: $radius-xl;
   box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
 
+  @media (max-width: 640px) {
+    padding: $spacing-xl $spacing-md;
+  }
+
   h1 {
     color: $primary-purple;
     font-size: 2.5rem;
     margin-bottom: $spacing-xs;
     font-weight: 700;
+
+    @media (max-width: 640px) {
+      font-size: 1.8rem;
+    }
   }
 
   .hero-subtitle {
     color: $text-secondary;
     font-size: 1.2rem;
     margin-bottom: $spacing-xl;
+
+    @media (max-width: 640px) {
+      font-size: 1rem;
+    }
   }
 }
 
@@ -28,6 +40,11 @@
   gap: $spacing-md;
   margin-bottom: $spacing-lg;
   justify-content: center;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 .popular-searches {
@@ -69,6 +86,10 @@
   @include input-base;
   flex: 1;
   max-width: 500px;
+
+  @media (max-width: 640px) {
+    max-width: 100%;
+  }
 }
 
 .search-button {
@@ -90,6 +111,11 @@
 
   &:active {
     transform: translateY(0);
+  }
+
+  @media (max-width: 640px) {
+    width: 100%;
+    padding: 1rem;
   }
 }
 
@@ -203,6 +229,12 @@
   gap: $spacing-xs;
   margin-top: $spacing-xl;
   padding: $spacing-md 0;
+  flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    gap: 0.5rem;
+    padding: $spacing-md $spacing-xs;
+  }
 }
 
 .pagination-btn {
@@ -215,6 +247,7 @@
   cursor: pointer;
   transition: $transition-normal;
   font-weight: 500;
+  white-space: nowrap;
 
   &:hover:not(:disabled) {
     background-color: $primary-purple-dark;
@@ -227,12 +260,26 @@
     cursor: not-allowed;
     opacity: 0.6;
   }
+
+  @media (max-width: 640px) {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    flex: 1;
+    min-width: 80px;
+  }
 }
 
 .pagination-numbers {
   display: flex;
   gap: 0.25rem;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 640px) {
+    gap: 0.25rem;
+    max-width: 100%;
+  }
 }
 
 .pagination-number {
@@ -260,6 +307,13 @@
     font-weight: 600;
     box-shadow: $shadow-purple-sm;
   }
+
+  @media (max-width: 640px) {
+    min-width: 36px;
+    padding: 0.45rem 0.35rem;
+    font-size: 0.875rem;
+    border-width: 1px;
+  }
 }
 
 .pagination-ellipsis {
@@ -267,5 +321,19 @@
   color: $text-tertiary;
   user-select: none;
   font-weight: 600;
+
+  @media (max-width: 640px) {
+    padding: 0.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+// Приховати зайві номери сторінок на дуже маленьких екранах
+@media (max-width: 480px) {
+  .pagination-number:not(.active):not(:first-child):not(:last-child) {
+    &:nth-child(n+6) {
+      display: none;
+    }
+  }
 }
 
