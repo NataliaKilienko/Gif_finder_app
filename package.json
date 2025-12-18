@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build:gh-pages": "ng build --base-href /Gif_finder_app/",
-    "deploy": "npx angular-cli-ghpages --dir=dist/gif-finder-app"
+    "deploy": "npx angular-cli-ghpages --dir=dist/gif-finder-app/browser"
   },
   "prettier": {
     "printWidth": 100,
