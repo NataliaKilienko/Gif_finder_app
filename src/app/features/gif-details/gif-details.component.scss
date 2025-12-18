@@ -1,0 +1,121 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.back-button {
+  @include button-purple;
+  margin-bottom: $spacing-xl;
+}
+
+
+
+.gif-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-xl;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gif-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.gif-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  border: 3px solid $border-purple-light;
+}
+
+.gif-info {
+  h1 {
+    margin-top: 0;
+    margin-bottom: $spacing-lg;
+    color: $primary-purple;
+    font-weight: 700;
+  }
+}
+
+.info-section {
+  background-color: $bg-purple-light;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-lg;
+  border: 2px solid $border-purple-light;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: $spacing-md;
+    color: $primary-purple;
+    font-weight: 600;
+  }
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid $border-purple;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .label {
+    font-weight: 600;
+    color: $text-secondary;
+  }
+
+  .value {
+    color: $text-tertiary;
+    font-weight: 500;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.btn-copy, .btn-download {
+  flex: 1;
+  min-width: 200px;
+  padding: $spacing-md;
+  font-size: 1rem;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: $transition-normal;
+  font-weight: 600;
+}
+
+.btn-copy {
+  background-color: $primary-purple-light;
+  color: white;
+  box-shadow: $shadow-purple-light;
+
+  &:hover {
+    background-color: $primary-purple;
+    transform: translateY(-2px);
+    box-shadow: $shadow-purple-md;
+  }
+}
+
+.btn-download {
+  background-color: $primary-purple;
+  color: white;
+  box-shadow: $shadow-purple-sm;
+
+  &:hover {
+    background-color: $primary-purple-dark;
+    transform: translateY(-2px);
+    box-shadow: $shadow-purple-md;
+  }
+}
+

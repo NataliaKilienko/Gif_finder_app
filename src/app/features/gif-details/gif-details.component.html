@@ -1,0 +1,71 @@
+<div class="details-container">
+  <button (click)="goBack()" class="back-button">← Back to Search</button>
+
+  @if (loading()) {
+    <app-loading>Loading GIF details...</app-loading>
+  }
+
+  @if (error() && !loading()) {
+    <app-error-message
+      [message]="error()!"
+      buttonText="Back to Search"
+      (retry)="goBack()"
+    ></app-error-message>
+  }
+
+  @if (gif()) {
+    <div class="gif-details">
+      <div class="gif-image-container">
+        <img
+          [src]="gif()!.images.original.url"
+          [alt]="gif()!.title"
+          class="gif-image"
+        />
+      </div>
+
+      <div class="gif-info">
+        <h1>{{ gif()!.title || 'Untitled' }}</h1>
+
+        <div class="info-section">
+          <h3>Information</h3>
+          <div class="info-item">
+            <span class="label">ID:</span>
+            <span class="value">{{ gif()!.id }}</span>
+          </div>
+          @if (gif()!.username) {
+            <div class="info-item">
+              <span class="label">Author:</span>
+              <span class="value">{{ gif()!.username }}</span>
+            </div>
+          }
+          @if (gif()!.rating) {
+            <div class="info-item">
+              <span class="label">Rating:</span>
+              <span class="value">{{ gif()!.rating }}</span>
+            </div>
+          }
+          @if (gif()!.import_datetime) {
+            <div class="info-item">
+              <span class="label">Created:</span>
+              <span class="value">{{ gif()!.import_datetime | date:'medium' }}</span>
+            </div>
+          }
+          <div class="info-item">
+            <span class="label">Size:</span>
+            <span class="value">{{ gif()!.images.original.width }} x {{ gif()!.images.original.height }}</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button (click)="copyLink(gif()!.url)" class="btn-copy">
+            Copy Link
+          </button>
+          <button (click)="downloadGif(gif()!.images.original.url, gif()!.title)" class="btn-download">
+            Download GIF
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+

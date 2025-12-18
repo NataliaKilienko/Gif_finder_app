@@ -1,59 +1,165 @@
-# GifFinderApp
+# 🎬 GIF Finder App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+A modern web application for searching and discovering GIFs using the Giphy API. Built with Angular 21 and featuring a clean, purple-themed UI.
 
-## Development server
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=flat&logo=angular)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript)
+![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=flat&logo=sass)
 
-To start a local development server, run:
+## ✨ Features
 
+- 🔍 **Search GIFs** - Search millions of GIFs by keyword
+- 🔥 **Trending GIFs** - Browse trending GIFs on the home page
+- 📋 **Detailed View** - View GIF details including author, date, size, and rating
+- 📎 **Copy Link** - Copy GIF URL to clipboard with one click
+- ⬇️ **Download** - Download GIFs directly to your device
+- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
+- 🎨 **Beautiful UI** - Clean purple-themed interface with smooth animations
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
 ```bash
-ng serve
+git clone <repository-url>
+cd gif-finder-app
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+2. **Install dependencies**
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+3. **Start the development server**
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+4. **Open your browser**
+Navigate to `http://localhost:4200/`
 
-To build the project run:
+The app is ready to use! No additional configuration needed - it includes a working Giphy API key.
 
-```bash
-ng build
+## 🏗️ Project Structure
+
+```
+src/
+├── app/
+│   ├── core/                    # Core business logic
+│   │   ├── constants/           # Configuration constants
+│   │   ├── models/              # TypeScript interfaces
+│   │   └── services/            # API services
+│   ├── features/                # Feature modules
+│   │   ├── search/              # Search & trending GIFs
+│   │   └── gif-details/         # GIF details page
+│   ├── shared/                  # Shared resources
+│   │   ├── components/          # Reusable UI components
+│   │   └── utils/               # Utility functions
+│   └── app.*                    # Root component & routing
+├── environments/                # Environment configuration
+│   └── environment.ts           # API keys & URLs
+└── styles/                      # Global styles
+    ├── _variables.scss          # SCSS variables
+    └── _mixins.scss             # SCSS mixins
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🛠️ Tech Stack
 
-## Running unit tests
+### Core
+- **Angular 21** - Latest Angular with standalone components
+- **TypeScript** - Type-safe development
+- **RxJS** - Reactive programming
+- **Angular Router** - Client-side routing
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Styling
+- **SCSS** - Advanced CSS with variables and mixins
+- **Angular Material Icons** - Icon library
+- **Custom Purple Theme** - Consistent design system
+
+### API
+- **Giphy API** - GIF search and retrieval
+- **HttpClient** - HTTP requests with fetch API
+
+## ⚡ Performance Optimizations
+
+This project implements several Angular best practices for optimal performance:
+
+- ✅ **OnPush Change Detection** - Reduces change detection cycles
+- ✅ **TrackBy Functions** - Optimizes list rendering
+- ✅ **Signals** - Fine-grained reactivity (Angular 21)
+- ✅ **Lazy Loading** - Code splitting for faster initial load
+- ✅ **SCSS Variables & Mixins** - Reduces CSS duplication
+
+## 📦 Build
+
+Build the project for production:
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+The build artifacts will be stored in the `dist/` directory, optimized for production deployment.
 
-For end-to-end (e2e) testing, run:
+## 🧪 Testing
 
+Run unit tests:
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Run end-to-end tests:
+```bash
+npm run e2e
+```
 
-## Additional Resources
+## 📝 Available Scripts
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `npm start` - Start development server
+- `npm run build` - Build for production
+- `npm test` - Run unit tests
+- `npm run lint` - Lint code
+
+## 🎨 Architecture Highlights
+
+### Feature-Based Structure
+The app follows a feature-based architecture with clear separation of concerns:
+- **Core** - Shared business logic and services
+- **Features** - Self-contained feature modules
+- **Shared** - Reusable components and utilities
+
+### Clean Code Principles
+- **DRY** - No code duplication, shared utilities
+- **SOLID** - Single responsibility, dependency injection
+- **Type Safety** - Full TypeScript coverage
+- **Reactive** - Signals and observables for state management
+
+### Modern Angular Patterns
+- Standalone components (no NgModules)
+- Signal-based state management
+- Input/Output signals for component communication
+- OnPush change detection strategy
+
+## 🌐 Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🙏 Acknowledgments
+
+- [Giphy API](https://developers.giphy.com/) - GIF data provider
+- [Angular](https://angular.dev/) - Framework
+- [Angular Material](https://material.angular.io/) - Icons
+
+---

@@ -1,0 +1,32 @@
+@use '../../../../styles/variables' as *;
+
+.loading {
+  text-align: center;
+  padding: $spacing-2xl $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+
+  p {
+    font-size: 1.1rem;
+    color: $primary-purple;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid $border-purple;
+  border-top: 4px solid $primary-purple;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

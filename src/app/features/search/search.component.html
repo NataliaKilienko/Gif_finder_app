@@ -1,0 +1,108 @@
+<div class="search-container">
+  <div class="hero-section">
+    <h1>Discover & Share GIFs</h1>
+    <p class="hero-subtitle">Search millions of GIFs from GIPHY</p>
+
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        (input)="onInputChange()"
+        placeholder="Search for GIFs..."
+        class="search-input"
+      />
+      <button (click)="onSearch()" class="search-button">Search</button>
+    </div>
+
+    @if (!hasSearched() && !loading()) {
+      <div class="popular-searches">
+        <span class="popular-label">Popular:</span>
+        @for (term of popularSearches; track term) {
+          <button (click)="searchPopular(term)" class="popular-tag">{{ term }}</button>
+        }
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <app-loading>Searching for GIFs...</app-loading>
+  }
+
+  @if (error() && !loading()) {
+    <app-error-message
+      [message]="error()!"
+      (retry)="onSearch()"
+    />
+  }
+
+  @if (!loading() && !error() && hasSearched() && gifs().length === 0) {
+    <app-empty-state
+      title="No GIFs Found"
+      [message]="'We could not find any GIFs matching &quot;' + searchQuery() + '&quot;'"
+      hint="Try different keywords or check your spelling"
+    ></app-empty-state>
+  }
+
+  @if (gifs().length > 0 && !loading()) {
+    <div class="section-header">
+      <h2>{{ isTrending() ? 'Trending GIFs' : 'Search Results' }}</h2>
+      <p class="results-count">{{ totalCount() }} GIFs found</p>
+    </div>
+
+    <div class="gif-grid">
+      @for (gif of gifs(); track trackByGifId($index, gif)) {
+        <div class="gif-card">
+          <img
+            [src]="gif.images.fixed_height?.url || gif.images.original.url"
+            [alt]="gif.title"
+            (click)="viewDetails(gif.id)"
+            class="gif-image"
+          />
+          <div class="gif-actions">
+            <button (click)="viewDetails(gif.id)" class="btn-details">Details</button>
+            <button (click)="copyLink(gif.url)" class="btn-copy">Copy</button>
+            <button (click)="downloadGif(gif.images.original.url, gif.title)" class="btn-download">Download</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button
+          (click)="previousPage()"
+          [disabled]="currentPage() === 1"
+          class="pagination-btn"
+        >
+          Previous
+        </button>
+
+        <div class="pagination-numbers">
+          @for (page of getPageNumbers(); track page) {
+            @if (page === -1) {
+              <span class="pagination-ellipsis">...</span>
+            } @else {
+              <button
+                (click)="goToPage(page)"
+                [class.active]="page === currentPage()"
+                class="pagination-number"
+              >
+                {{ page }}
+              </button>
+            }
+          }
+        </div>
+
+        <button
+          (click)="nextPage()"
+          [disabled]="currentPage() === totalPages()"
+          class="pagination-btn"
+        >
+          Next
+        </button>
+      </div>
+    }
+  }
+</div>
+

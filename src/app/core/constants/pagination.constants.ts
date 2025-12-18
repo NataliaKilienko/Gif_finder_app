@@ -1,0 +1,6 @@
+export const PAGINATION_CONFIG = {
+  DEFAULT_PAGE_SIZE: 20,
+  MAX_PAGE_NUMBERS_DISPLAY: 7,
+  ELLIPSIS_MARKER: -1
+} as const;
+

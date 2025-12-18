@@ -1,0 +1,36 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.error {
+  text-align: center;
+  padding: $spacing-2xl $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  background-color: $error-bg;
+  border: 2px solid $error-border;
+  border-radius: $radius-lg;
+  margin: $spacing-xl auto;
+  max-width: 500px;
+}
+
+.error-icon {
+  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
+  color: $error-icon;
+}
+
+.error-message {
+  color: $error-text;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.retry-button {
+  @include button-purple;
+  margin-top: $spacing-xs;
+}
+
