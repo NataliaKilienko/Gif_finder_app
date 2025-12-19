@@ -1,25 +1,27 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { GiphyService, ToastService } from '../../core/services';
+import { MatIconModule } from '@angular/material/icon';
+import { GiphyService } from '../../core/services';
 import { Gif } from '../../core/models';
 import { PAGINATION_CONFIG } from '../../core/constants';
 import { LoadingComponent, ErrorMessageComponent, EmptyStateComponent } from '../../shared/components';
-import { GifUtils, ErrorHandlerUtils } from '../../shared/utils';
+import { ErrorHandlerUtils } from '../../shared/utils';
+import { GifActionsBase } from '../../shared/base/gif-actions.base';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingComponent, ErrorMessageComponent, EmptyStateComponent],
+  imports: [CommonModule, FormsModule, MatIconModule, LoadingComponent, ErrorMessageComponent, EmptyStateComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent extends GifActionsBase implements OnInit {
   searchQuery = signal('');
   gifs = signal<Gif[]>([]);
   loading = signal(false);
+  loadingMore = signal(false);
   error = signal<string | null>(null);
   hasSearched = signal(false);
   isTrending = signal(true);
@@ -27,28 +29,38 @@ export class SearchComponent implements OnInit {
   currentPage = signal(1);
   itemsPerPage = signal(PAGINATION_CONFIG.DEFAULT_PAGE_SIZE);
   totalCount = signal(0);
-  totalPages = signal(0);
+  hasMoreGifs = signal(true);
 
   popularSearches = ['funny cats', 'reaction', 'happy dance', 'thumbs up', 'celebration'];
 
   protected readonly Math = Math;
-
-  constructor(
-    private giphyService: GiphyService,
-    private router: Router,
-    private toastService: ToastService
-  ) {}
+  private giphyService = inject(GiphyService);
 
   ngOnInit(): void {
     this.loadTrendingGifs();
   }
 
-  loadTrendingGifs(): void {
+  @HostListener('window:scroll')
+  onScroll(): void {
+    if (this.loading() || this.loadingMore() || !this.hasMoreGifs()) {
+      return;
+    }
+
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    const threshold = 200;
+
+    if (scrollPosition >= documentHeight - threshold) {
+      this.loadMoreGifs();
+    }
+  }
+
+  loadTrendingGifs(append: boolean = false): void {
     this.isTrending.set(true);
     this.loadGifsData(() => {
       const offset = (this.currentPage() - 1) * this.itemsPerPage();
       return this.giphyService.getTrendingGifs(this.itemsPerPage(), offset);
-    });
+    }, append);
   }
 
   onInputChange(): void {
@@ -77,7 +89,7 @@ export class SearchComponent implements OnInit {
     this.onSearch();
   }
 
-  loadGifs(): void {
+  loadGifs(append: boolean = false): void {
     const query = this.searchQuery();
     if (!query.trim()) {
       this.clearResults();
@@ -88,25 +100,56 @@ export class SearchComponent implements OnInit {
     this.loadGifsData(() => {
       const offset = (this.currentPage() - 1) * this.itemsPerPage();
       return this.giphyService.searchGifs(query, this.itemsPerPage(), offset);
-    });
+    }, append);
   }
 
-  private loadGifsData(apiCall: () => any): void {
-    this.loading.set(true);
+  loadMoreGifs(): void {
+    if (!this.hasMoreGifs() || this.loadingMore()) {
+      return;
+    }
+
+    this.currentPage.set(this.currentPage() + 1);
+
+    if (this.isTrending()) {
+      this.loadTrendingGifs(true);
+    } else {
+      this.loadGifs(true);
+    }
+  }
+
+  private loadGifsData(apiCall: () => any, append: boolean = false): void {
+    if (append) {
+      this.loadingMore.set(true);
+    } else {
+      this.loading.set(true);
+    }
     this.error.set(null);
 
     apiCall().subscribe({
       next: (response: any) => {
-        this.gifs.set(response.data);
+        const newGifs = response.data;
+
+        if (append) {
+          this.gifs.set([...this.gifs(), ...newGifs]);
+          this.loadingMore.set(false);
+        } else {
+          this.gifs.set(newGifs);
+          this.loading.set(false);
+        }
+
         this.totalCount.set(response.pagination.total_count);
-        this.totalPages.set(Math.ceil(response.pagination.total_count / this.itemsPerPage()));
-        this.loading.set(false);
+
+        const totalLoaded = this.currentPage() * this.itemsPerPage();
+        this.hasMoreGifs.set(totalLoaded < response.pagination.total_count);
       },
       error: (err: any) => {
-        this.gifs.set([]);
-        this.totalCount.set(0);
-        this.totalPages.set(0);
+        if (!append) {
+          this.gifs.set([]);
+          this.totalCount.set(0);
+        }
         this.loading.set(false);
+        this.loadingMore.set(false);
+        this.hasMoreGifs.set(false);
         this.error.set(ErrorHandlerUtils.getErrorMessage(err));
         console.error('Error fetching GIFs:', err);
       }
@@ -116,89 +159,11 @@ export class SearchComponent implements OnInit {
   clearResults(): void {
     this.gifs.set([]);
     this.totalCount.set(0);
-    this.totalPages.set(0);
     this.currentPage.set(1);
     this.error.set(null);
     this.hasSearched.set(false);
+    this.hasMoreGifs.set(true);
   }
 
-  goToPage(page: number): void {
-    if (page < 1 || page > this.totalPages()) {
-      return;
-    }
-    this.currentPage.set(page);
-
-    if (this.isTrending()) {
-      this.loadTrendingGifs();
-    } else {
-      this.loadGifs();
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  nextPage(): void {
-    if (this.currentPage() < this.totalPages()) {
-      this.goToPage(this.currentPage() + 1);
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage() > 1) {
-      this.goToPage(this.currentPage() - 1);
-    }
-  }
-
-  getPageNumbers(): number[] {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const pages: number[] = [];
-
-    if (total <= 7) {
-      for (let i = 1; i <= total; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (current <= 4) {
-        for (let i = 1; i <= 5; i++) {
-          pages.push(i);
-        }
-        pages.push(-1);
-        pages.push(total);
-      } else if (current >= total - 3) {
-        pages.push(1);
-        pages.push(-1);
-        for (let i = total - 4; i <= total; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push(-1);
-        for (let i = current - 1; i <= current + 1; i++) {
-          pages.push(i);
-        }
-        pages.push(-1);
-        pages.push(total);
-      }
-    }
-
-    return pages;
-  }
-
-  viewDetails(gifId: string): void {
-    this.router.navigate(['/gif', gifId]);
-  }
-
-  copyLink(url: string): void {
-    GifUtils.copyLink(url, this.toastService);
-  }
-
-  downloadGif(url: string, title: string): void {
-    GifUtils.downloadGif(url, title, this.toastService);
-  }
-
-  trackByGifId(_index: number, gif: Gif): string {
-    return gif.id;
-  }
 }
 

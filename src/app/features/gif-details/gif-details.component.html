@@ -57,10 +57,20 @@
         </div>
 
         <div class="actions">
+          <button
+            (click)="toggleFavorite(gif()!)"
+            class="btn-favorite"
+            [class.is-favorite]="isFavorite(gif()!.id)"
+          >
+            <mat-icon>{{ isFavorite(gif()!.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+            {{ isFavorite(gif()!.id) ? 'Remove from Favorites' : 'Add to Favorites' }}
+          </button>
           <button (click)="copyLink(gif()!.url)" class="btn-copy">
+            <mat-icon>link</mat-icon>
             Copy Link
           </button>
           <button (click)="downloadGif(gif()!.images.original.url, gif()!.title)" class="btn-download">
+            <mat-icon>download</mat-icon>
             Download GIF
           </button>
         </div>

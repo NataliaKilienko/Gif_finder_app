@@ -1,30 +1,28 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GiphyService, ToastService } from '../../core/services';
+import { ActivatedRoute } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { GiphyService } from '../../core/services';
 import { Gif } from '../../core/models';
 import { LoadingComponent, ErrorMessageComponent } from '../../shared/components';
-import { GifUtils, ErrorHandlerUtils } from '../../shared/utils';
+import { ErrorHandlerUtils } from '../../shared/utils';
+import { GifActionsBase } from '../../shared/base/gif-actions.base';
 
 @Component({
   selector: 'app-gif-details',
   standalone: true,
-  imports: [CommonModule, LoadingComponent, ErrorMessageComponent],
+  imports: [CommonModule, MatIconModule, LoadingComponent, ErrorMessageComponent],
   templateUrl: './gif-details.component.html',
   styleUrl: './gif-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GifDetailsComponent implements OnInit {
+export class GifDetailsComponent extends GifActionsBase implements OnInit {
   gif = signal<Gif | null>(null);
   loading = signal(false);
   error = signal<string | null>(null);
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private giphyService: GiphyService,
-    private toastService: ToastService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private giphyService = inject(GiphyService);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -52,14 +50,6 @@ export class GifDetailsComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/']);
-  }
-
-  copyLink(url: string): void {
-    GifUtils.copyLink(url, this.toastService);
-  }
-
-  downloadGif(url: string, title: string): void {
-    GifUtils.downloadGif(url, title, this.toastService);
   }
 }
 

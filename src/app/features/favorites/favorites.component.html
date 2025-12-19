@@ -1,0 +1,58 @@
+<div class="favorites-container">
+  <div class="header">
+    <h1><mat-icon class="header-icon">favorite</mat-icon> My Favorites</h1>
+    <p class="subtitle">{{ favoritesService.getFavoritesCount() }} GIFs saved</p>
+    @if (favoritesService.getFavoritesCount() > 0) {
+      <button (click)="clearAll()" class="btn-clear-all">
+        <mat-icon>delete_sweep</mat-icon>
+        Clear All
+      </button>
+    }
+  </div>
+
+  @if (favoritesService.favorites().length === 0) {
+    <app-empty-state
+      icon="favorite_border"
+      title="No Favorites Yet"
+      message="Start adding GIFs to your favorites by clicking the heart icon"
+      hint="Your favorite GIFs will appear here"
+    ></app-empty-state>
+  }
+
+  @if (favoritesService.favorites().length > 0) {
+    <div class="gif-grid">
+      @for (gif of favoritesService.favorites(); track trackByGifId($index, gif)) {
+        <div class="gif-card">
+          <button
+            (click)="removeFromFavorites(gif)"
+            class="favorite-btn"
+            title="Remove from favorites"
+          >
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <img
+            [src]="gif.images.fixed_height?.url || gif.images.original.url"
+            [alt]="gif.title"
+            (click)="viewDetails(gif.id)"
+            class="gif-image"
+          />
+          <div class="gif-actions">
+            <button (click)="viewDetails(gif.id)" class="btn-details">
+              <mat-icon>info</mat-icon>
+              Details
+            </button>
+            <button (click)="copyLink(gif.url)" class="btn-copy">
+              <mat-icon>link</mat-icon>
+              Copy
+            </button>
+            <button (click)="downloadGif(gif.images.original.url, gif.title)" class="btn-download">
+              <mat-icon>download</mat-icon>
+              Download
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+

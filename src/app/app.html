@@ -1,3 +1,19 @@
+<nav class="navbar">
+  <div class="nav-content">
+    <a routerLink="/" class="nav-logo">
+      <mat-icon class="logo-icon">gif_box</mat-icon>
+      <span class="logo-text">GIF Finder</span>
+    </a>
+    <a routerLink="/favorites" class="nav-favorites" routerLinkActive="active">
+      <mat-icon class="heart-icon">favorite</mat-icon>
+      <span class="favorites-text">Favorites</span>
+      @if (favoritesCount() > 0) {
+        <span class="favorites-badge">{{ favoritesCount() }}</span>
+      }
+    </a>
+  </div>
+</nav>
+
 <div class="container">
   <router-outlet />
 </div>

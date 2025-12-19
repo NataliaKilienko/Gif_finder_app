@@ -1,0 +1,183 @@
+@use '../../../../styles/variables' as *;
+
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: $radius-xl !important;
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.3) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%) !important;
+}
+
+.confirm-dialog {
+  min-width: 450px;
+  max-width: 500px;
+  padding: $spacing-lg;
+}
+
+.dialog-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border-radius: $radius-lg;
+  border: 2px solid $border-purple;
+
+  .dialog-icon {
+    font-size: 4.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    color: #ef4444;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-radius: 50%;
+    padding: $spacing-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-scale 2s ease-in-out infinite;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
+  }
+
+  h2 {
+    margin: 0;
+    background: $gradient-purple;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -0.5px;
+  }
+}
+
+.dialog-message {
+  color: $text-secondary;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  text-align: center;
+  margin: 0;
+  padding: 0 $spacing-lg;
+  font-weight: 500;
+}
+
+mat-dialog-content {
+  padding: $spacing-lg 0;
+  overflow: visible;
+}
+
+mat-dialog-actions {
+  padding: $spacing-xl $spacing-md 0;
+  gap: $spacing-md;
+  justify-content: center;
+}
+
+.btn-cancel {
+  color: $text-secondary;
+  font-weight: 600;
+  padding: $spacing-md $spacing-xl;
+  border-radius: $radius-md;
+  transition: $transition-normal;
+  border: 2px solid $border-purple-light;
+  background: $bg-white;
+  font-size: 1rem;
+
+  &:hover {
+    background: $bg-purple-light;
+    border-color: $primary-purple-pale;
+    color: $primary-purple;
+    transform: translateY(-2px);
+    box-shadow: $shadow-sm;
+  }
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-weight: 600;
+  padding: $spacing-md $spacing-xl;
+  border-radius: $radius-md;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+  transition: $transition-normal;
+  border: none;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.45);
+    transform: translateY(-3px);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes pulse-scale {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(239, 68, 68, 0.35);
+  }
+}
+
+@media (max-width: 640px) {
+  .confirm-dialog {
+    min-width: 320px;
+    padding: $spacing-md;
+  }
+
+  .dialog-header {
+    padding: $spacing-md;
+    gap: $spacing-sm;
+
+    .dialog-icon {
+      font-size: 3.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      padding: $spacing-md;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
+
+  .dialog-message {
+    font-size: 0.95rem;
+    padding: 0 $spacing-sm;
+  }
+
+  mat-dialog-actions {
+    flex-direction: column;
+    gap: $spacing-sm;
+    padding: $spacing-lg $spacing-sm 0;
+
+    .btn-cancel,
+    .btn-confirm {
+      width: 100%;
+      padding: $spacing-md;
+    }
+  }
+}
+

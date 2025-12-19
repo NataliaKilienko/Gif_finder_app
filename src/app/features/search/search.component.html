@@ -53,6 +53,14 @@
     <div class="gif-grid">
       @for (gif of gifs(); track trackByGifId($index, gif)) {
         <div class="gif-card">
+          <button
+            (click)="toggleFavorite(gif)"
+            class="favorite-btn"
+            [class.is-favorite]="isFavorite(gif.id)"
+            title="{{ isFavorite(gif.id) ? 'Remove from favorites' : 'Add to favorites' }}"
+          >
+            <mat-icon>{{ isFavorite(gif.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+          </button>
           <img
             [src]="gif.images.fixed_height?.url || gif.images.original.url"
             [alt]="gif.title"
@@ -68,39 +76,16 @@
       }
     </div>
 
-    @if (totalPages() > 1) {
-      <div class="pagination">
-        <button
-          (click)="previousPage()"
-          [disabled]="currentPage() === 1"
-          class="pagination-btn"
-        >
-          Previous
-        </button>
+    @if (loadingMore()) {
+      <div class="loading-more">
+        <div class="spinner"></div>
+        <p>Loading more GIFs...</p>
+      </div>
+    }
 
-        <div class="pagination-numbers">
-          @for (page of getPageNumbers(); track page) {
-            @if (page === -1) {
-              <span class="pagination-ellipsis">...</span>
-            } @else {
-              <button
-                (click)="goToPage(page)"
-                [class.active]="page === currentPage()"
-                class="pagination-number"
-              >
-                {{ page }}
-              </button>
-            }
-          }
-        </div>
-
-        <button
-          (click)="nextPage()"
-          [disabled]="currentPage() === totalPages()"
-          class="pagination-btn"
-        >
-          Next
-        </button>
+    @if (!hasMoreGifs() && !loadingMore()) {
+      <div class="end-message">
+        <p>You've reached the end! 🎉</p>
       </div>
     }
   }

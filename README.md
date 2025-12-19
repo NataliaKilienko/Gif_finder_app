@@ -8,13 +8,16 @@ A modern web application for searching and discovering GIFs using the Giphy API.
 
 ## ✨ Features
 
-- 🔍 **Search GIFs** - Search millions of GIFs by keyword
+- 🔍 **Search GIFs** - Search millions of GIFs by keyword with instant results
 - 🔥 **Trending GIFs** - Browse trending GIFs on the home page
+- ❤️ **Favorites** - Save your favorite GIFs with localStorage persistence
 - 📋 **Detailed View** - View GIF details including author, date, size, and rating
 - 📎 **Copy Link** - Copy GIF URL to clipboard with one click
 - ⬇️ **Download** - Download GIFs directly to your device
+- ♾️ **Infinite Scroll** - Seamlessly load more GIFs as you scroll
 - 📱 **Responsive Design** - Works seamlessly on desktop and mobile
 - 🎨 **Beautiful UI** - Clean purple-themed interface with smooth animations
+- 🔔 **Toast Notifications** - User-friendly feedback for all actions
 
 ## 🚀 Quick Start
 
@@ -53,19 +56,32 @@ src/
 ├── app/
 │   ├── core/                    # Core business logic
 │   │   ├── constants/           # Configuration constants
-│   │   ├── models/              # TypeScript interfaces
-│   │   └── services/            # API services
+│   │   ├── models/              # TypeScript interfaces (Gif, GiphyResponse)
+│   │   └── services/            # Business services
+│   │       ├── giphy.service.ts      # Giphy API integration
+│   │       ├── favorites.service.ts  # Favorites management
+│   │       └── toast.service.ts      # Toast notifications
 │   ├── features/                # Feature modules
-│   │   ├── search/              # Search & trending GIFs
+│   │   ├── search/              # Search & trending GIFs with infinite scroll
+│   │   ├── favorites/           # Favorites page
 │   │   └── gif-details/         # GIF details page
 │   ├── shared/                  # Shared resources
+│   │   ├── base/                # Base classes
+│   │   │   └── gif-actions.base.ts   # Shared GIF actions logic
 │   │   ├── components/          # Reusable UI components
+│   │   │   ├── loading/              # Loading spinner
+│   │   │   ├── error-message/        # Error display
+│   │   │   ├── empty-state/          # Empty state
+│   │   │   ├── toast/                # Toast notifications
+│   │   │   └── confirm-dialog/       # Confirmation dialog
 │   │   └── utils/               # Utility functions
+│   │       ├── gif.utils.ts          # GIF-related utilities
+│   │       └── error-handler.utils.ts # Error handling
 │   └── app.*                    # Root component & routing
 ├── environments/                # Environment configuration
 │   └── environment.ts           # API keys & URLs
 └── styles/                      # Global styles
-    ├── _variables.scss          # SCSS variables
+    ├── _variables.scss          # SCSS variables (colors, spacing, etc.)
     └── _mixins.scss             # SCSS mixins
 ```
 
@@ -79,12 +95,13 @@ src/
 
 ### Styling
 - **SCSS** - Advanced CSS with variables and mixins
-- **Angular Material Icons** - Icon library
-- **Custom Purple Theme** - Consistent design system
+- **Angular Material** - Icons and Dialog components
+- **Custom Purple Theme** - Consistent design system with gradients
 
-### API
+### API & Storage
 - **Giphy API** - GIF search and retrieval
 - **HttpClient** - HTTP requests with fetch API
+- **localStorage** - Client-side favorites persistence
 
 ## ⚡ Performance Optimizations
 
@@ -94,7 +111,10 @@ This project implements several Angular best practices for optimal performance:
 - ✅ **TrackBy Functions** - Optimizes list rendering
 - ✅ **Signals** - Fine-grained reactivity (Angular 21)
 - ✅ **Lazy Loading** - Code splitting for faster initial load
+- ✅ **Infinite Scroll** - Load more content on demand
+- ✅ **Base Classes** - DRY principle, eliminates code duplication
 - ✅ **SCSS Variables & Mixins** - Reduces CSS duplication
+- ✅ **Memory Leak Prevention** - Proper subscription management
 
 ## 📦 Build
 
@@ -129,21 +149,30 @@ npm run e2e
 
 ### Feature-Based Structure
 The app follows a feature-based architecture with clear separation of concerns:
-- **Core** - Shared business logic and services
-- **Features** - Self-contained feature modules
-- **Shared** - Reusable components and utilities
+- **Core** - Shared business logic, services, models, and constants
+- **Features** - Self-contained feature modules (search, favorites, gif-details)
+- **Shared** - Reusable components, base classes, and utilities
 
 ### Clean Code Principles
-- **DRY** - No code duplication, shared utilities
-- **SOLID** - Single responsibility, dependency injection
-- **Type Safety** - Full TypeScript coverage
+- **DRY** - No code duplication, shared base classes and utilities
+- **SOLID** - Single responsibility, dependency injection with `inject()`
+- **Type Safety** - Full TypeScript coverage with strict mode
 - **Reactive** - Signals and observables for state management
+- **Inheritance** - Base classes for shared component logic
 
 ### Modern Angular Patterns
 - Standalone components (no NgModules)
 - Signal-based state management
-- Input/Output signals for component communication
+- `inject()` function for dependency injection
 - OnPush change detection strategy
+- Computed signals for derived state
+- @HostListener for scroll events
+
+### State Management
+- **Signals** - Reactive state with fine-grained updates
+- **Services** - Centralized business logic (Giphy, Favorites, Toast)
+- **localStorage** - Persistent favorites across sessions
+- **RxJS** - Asynchronous data streams
 
 ## 🌐 Browser Support
 
@@ -156,10 +185,29 @@ The app follows a feature-based architecture with clear separation of concerns:
 
 This project is open source and available under the MIT License.
 
+## 🎯 Key Components
+
+### Pages
+- **SearchComponent** - Main page with search, trending GIFs, and infinite scroll
+- **FavoritesComponent** - Saved favorites with clear all functionality
+- **GifDetailsComponent** - Detailed GIF information and actions
+
+### Shared Components
+- **LoadingComponent** - Reusable loading spinner
+- **ErrorMessageComponent** - Error display with retry functionality
+- **EmptyStateComponent** - Empty state with custom messages
+- **ToastComponent** - Toast notifications for user feedback
+- **ConfirmDialogComponent** - Material Dialog for confirmations
+
+### Services
+- **GiphyService** - Giphy API integration (search, trending, details)
+- **FavoritesService** - Favorites management with localStorage
+- **ToastService** - Toast notification system
+
 ## 🙏 Acknowledgments
 
 - [Giphy API](https://developers.giphy.com/) - GIF data provider
 - [Angular](https://angular.dev/) - Framework
-- [Angular Material](https://material.angular.io/) - Icons
+- [Angular Material](https://material.angular.io/) - Icons and Dialog
 
 ---
